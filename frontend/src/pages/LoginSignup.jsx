@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import logo from "../../public/Logo.png";
+import { loginUser, registerUser } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginSignup() {
   const [isSignIn, setIsSignIn] = useState(
@@ -12,21 +14,54 @@ export default function LoginSignup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/todolist", { replace: true });
+    }
+  }, [navigate]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isSignIn) {
-      console.log("Sign in attempt:", { email, password });
-    } else {
-      console.log("Sign up attempt:", {
-        name,
-        email,
-        password,
-        confirmPassword,
-        agreeTerms,
-      });
+    try {
+      if (isSignIn) {
+        console.log("Sign in attempt:", { email, password });
+        const data = {
+          email: email,
+          password: password,
+        };
+        const response = await loginUser(data);
+        console.log("Login successful:", response);
+        localStorage.setItem("token", response.accessToken);
+        navigate("/todolist", { replace: true });
+      } else {
+        console.log("Sign up attempt:", {
+          name,
+          email,
+          password,
+          confirmPassword,
+        });
+
+        if (password !== confirmPassword) {
+          setPasswordError("Passwords do not match");
+          return;
+        }
+        const data = {
+          name: name,
+          email: email,
+          password: password,
+        };
+
+        const response = await registerUser(data);
+        console.log("Registration successful:", response);
+        togglePage();
+      }
+    } catch (error) {
+      console.error("Auth error:", err);
+      alert(err.message || "Something went wrong. Please try again.");
     }
   };
 
@@ -48,9 +83,6 @@ export default function LoginSignup() {
           <div className="text-center space-y-2">
             <div className="flex justify-center mb-4">
               <img src={logo} alt="Logo" className=" w-[25%]" />
-              {/* <div className="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg transform rotate-6">
-                <Lock className="w-8 h-8 text-white transform -rotate-6" />
-              </div> */}
             </div>
             <h1 className="text-3xl font-bold text-gray-900">
               {isSignIn ? "Welcome Back" : "Create Account"}
@@ -157,31 +189,12 @@ export default function LoginSignup() {
               </div>
             )}
 
-            {isSignIn ? (
+            {isSignIn ?? (
               <div className="flex justify-end">
                 <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium">
                   Forgot password?
                 </button>
               </div>
-            ) : (
-              <label className="flex items-start gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.target.checked)}
-                  className="w-4 h-4 mt-0.5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer"
-                />
-                <span className="text-sm text-gray-700">
-                  I agree to the{" "}
-                  <button className="text-indigo-600 hover:text-indigo-700 font-medium">
-                    Terms of Service
-                  </button>{" "}
-                  and{" "}
-                  <button className="text-indigo-600 hover:text-indigo-700 font-medium">
-                    Privacy Policy
-                  </button>
-                </span>
-              </label>
             )}
 
             <button
