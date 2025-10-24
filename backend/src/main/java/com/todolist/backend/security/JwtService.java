@@ -1,6 +1,7 @@
 package com.todolist.backend.security;
 
 import com.todolist.backend.model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,5 +53,21 @@ public class JwtService {
         );
 
         return generateAccessToken(user.getEmail(), claims);
+    }
+
+    public Claims extractAllClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(key)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+
+    public Integer extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        if(claims.get("uid") == null) {
+            throw new IllegalArgumentException("Invalid token: missing uid claim");
+        }
+        return (int) claims.get("uid");
     }
 }
