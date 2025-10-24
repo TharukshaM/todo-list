@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class ListResponseDto {
-    private int userId;
+public class ToDoItemRequestDto {
+    private int user_id;
     private String title;
     private String description;
 }
