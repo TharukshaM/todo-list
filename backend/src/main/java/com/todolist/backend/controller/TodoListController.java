@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @RestController
@@ -39,5 +41,10 @@ public class TodoListController {
             return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
     @GetMapping("/items")
+    public ResponseEntity<List<ToDoItemResponseDto>> getLatestFiveItems() {
+        int userId = currentUser();
+        List<ToDoItemResponseDto> items = toDoListService.getLatestToDoItems(userId);
+        return ResponseEntity.ok(items);
+    }
 
 }

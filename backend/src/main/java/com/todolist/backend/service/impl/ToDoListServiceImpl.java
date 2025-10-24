@@ -10,6 +10,8 @@ import com.todolist.backend.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ToDoListServiceImpl implements ToDoListService {
@@ -30,9 +32,21 @@ public class ToDoListServiceImpl implements ToDoListService {
                     .id(savedTodo.getId())
                     .title(savedTodo.getTitle())
                     .description(savedTodo.getDescription())
+                    .createdAt(savedTodo.getCreatedAt())
                     .build();
         }catch(Exception e){
             throw new RuntimeException(e.getMessage());
         }
+    }
+    public List<ToDoItemResponseDto> getLatestToDoItems(int userId) {
+        List<Todo> todos = toDoRepository.findTop5ByUserIdOrderByCreatedAtDesc(userId);
+        return todos.stream()
+                .map(todo -> ToDoItemResponseDto.builder()
+                        .id(todo.getId())
+                        .title(todo.getTitle())
+                        .description(todo.getDescription())
+                        .createdAt(todo.getCreatedAt())
+                        .build())
+                .toList();
     }
 }

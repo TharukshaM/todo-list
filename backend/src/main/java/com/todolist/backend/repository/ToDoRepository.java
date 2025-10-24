@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ToDoRepository extends JpaRepository<Todo, Integer> {
-    List<Todo> findByUserId(Integer userId);
+    List<Todo> findTop5ByUserIdOrderByCreatedAtDesc(Integer userId);
 
     Optional<Todo> findById(Integer id);
 
