@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class ToDoItemRequestDto {
-    private int user_id;
+
     private String title;
     private String description;
 }
