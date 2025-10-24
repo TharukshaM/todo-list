@@ -1,12 +1,12 @@
 package com.todolist.backend.controller;
 
 import com.todolist.backend.dto.todolist.ToDoItemRequestDto;
+import com.todolist.backend.dto.todolist.ToDoItemResponseDto;
+import com.todolist.backend.service.ToDoListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
@@ -14,18 +14,30 @@ import static org.springframework.security.core.context.SecurityContextHolder.ge
 @RequestMapping("/todolist")
 @RequiredArgsConstructor
 public class TodoListController {
-//    private final ToDoListService toDoListService;
+    private final ToDoListService toDoListService;
 
-    private String curruntUser(){
-        String email = getContext().getAuthentication().getName();
-        System.out.println("Currunting user: " + email);
-        return email;
+    private Integer currentUser() {
+        var auth = getContext().getAuthentication();
+        if (auth == null || !auth.isAuthenticated()) {
+            throw new RuntimeException("User not authenticated");
+        }
+        String userId = auth.getName();
+        if (userId == null || userId.isBlank()) {
+            throw new RuntimeException("User not found");
+        }
+        try {
+            return Integer.parseInt(userId);
+        } catch (NumberFormatException ex) {
+            throw new RuntimeException("Unable to parse user id from authentication name", ex);
+        }
     }
 
     @PostMapping("/additem")
-    public ResponseEntity<String> addItem(@RequestBody ToDoItemRequestDto toDoItemRequestDto) {
-            System.out.println("f Received ToDo Item: {toDoItemRequestDto}");
-            var user = curruntUser();
-            return ResponseEntity.ok("User found : " + user);
+    public ResponseEntity<ToDoItemResponseDto> addItem(@RequestBody ToDoItemRequestDto toDoItemRequestDto) {
+            int userId = currentUser();
+            ToDoItemResponseDto item = toDoListService.addToDoItem(userId, toDoItemRequestDto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(item);
     }
+    @GetMapping("/items")
+
 }
