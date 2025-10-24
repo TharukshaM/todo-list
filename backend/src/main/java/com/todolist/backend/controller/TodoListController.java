@@ -47,4 +47,21 @@ public class TodoListController {
         return ResponseEntity.ok(items);
     }
 
+    @PutMapping("/item/{id}")
+    public ResponseEntity<ToDoItemResponseDto> updateItem(
+            @PathVariable int id,
+            @RequestBody ToDoItemRequestDto toDoItemRequestDto) {
+
+        int userId = currentUser();
+        ToDoItemResponseDto updatedItem = toDoListService.updateToDoItem(userId, id, toDoItemRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedItem);
+    }
+
+    @DeleteMapping("/item/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable int id) {
+        int userId = currentUser();
+        toDoListService.deleteToDoItem(userId, id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item deleted");
+    }
+
 }

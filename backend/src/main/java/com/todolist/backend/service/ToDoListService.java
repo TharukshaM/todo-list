@@ -8,4 +8,7 @@ import java.util.List;
 public interface ToDoListService {
     ToDoItemResponseDto addToDoItem(int userid, ToDoItemRequestDto toDoItemRequestDto);
     List<ToDoItemResponseDto> getLatestToDoItems(int userid);
+    ToDoItemResponseDto updateToDoItem(int userId,int todoId, ToDoItemRequestDto requestDto);
+    String deleteToDoItem(int userId, int todoId);
+
 }
