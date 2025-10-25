@@ -48,6 +48,7 @@ public class ToDoListServiceImpl implements ToDoListService {
                             .id(todo.getId())
                             .title(todo.getTitle())
                             .description(todo.getDescription())
+                            .completed(todo.isCompleted())
                             .createdAt(todo.getCreatedAt())
                             .build())
                     .toList();
@@ -65,9 +66,13 @@ public class ToDoListServiceImpl implements ToDoListService {
             if (todo.getUser().getId() != userId) {
                 throw new RuntimeException("Unauthorized to update this todo");
             }
+            if (requestDto.getTitle() != null && !requestDto.getTitle().isEmpty()) {
+                todo.setTitle(requestDto.getTitle());
+            }
 
-            todo.setTitle(requestDto.getTitle());
-            todo.setDescription(requestDto.getDescription());
+            if (requestDto.getDescription() != null && !requestDto.getDescription().isEmpty()) {
+                todo.setDescription(requestDto.getDescription());
+            }
             toDoRepository.save(todo);
 
             return ToDoItemResponseDto.builder()

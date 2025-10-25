@@ -16,5 +16,6 @@ public class ToDoItemResponseDto {
     private int id;
     private String title;
     private String description;
+    private boolean completed;
     private LocalDateTime createdAt;
 }
