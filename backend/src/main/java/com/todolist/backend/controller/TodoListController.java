@@ -13,7 +13,7 @@ import java.util.List;
 import static org.springframework.security.core.context.SecurityContextHolder.getContext;
 
 @RestController
-@RequestMapping("/todolist")
+@RequestMapping("/api/todolist")
 @RequiredArgsConstructor
 public class TodoListController {
     private final ToDoListService toDoListService;

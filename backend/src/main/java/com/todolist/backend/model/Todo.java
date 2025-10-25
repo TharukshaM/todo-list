@@ -26,6 +26,9 @@ public class Todo {
 
     private String description;
 
+    @Builder.Default
+    private boolean completed = false;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
