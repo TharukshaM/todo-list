@@ -1,11 +1,17 @@
-import { useState } from "react";
+import {BrowserRouter as Router, Route, Routes, Navigate} from 'react-router-dom';
 import "./App.css";
 import LoginSignup from "./pages/LoginSignup";
+import TodoList from "./pages/TodoList";
+import ProtectedRoute from './components/ProtectedRoute';
+
 function App() {
   return (
-    <>
-      <LoginSignup />
-    </>
+    <Router>
+      <Routes>
+        <Route path="/" element={<LoginSignup/>}></Route>
+        <Route path="/todolist" element={<ProtectedRoute><TodoList/></ProtectedRoute>}></Route>
+      </Routes>
+    </Router>
   );
 }
 
