@@ -34,6 +34,8 @@ I chose these technologies because they're industry-standard and powerful:
 
 Just follow these steps:
 
+## Run as a Service
+
 ### Step 1: Get the Code
 
 ### Step 2: Set Up the Database
@@ -71,6 +73,30 @@ VITE_API_BASE_URL=http://localhost:8080/api
 ### Step 6: Start the Frontend
 
 Now open your browser and go to `http://localhost:5173` - You should see the login page! 🎉
+
+## Run as Docker containers
+
+### Step 1: Clone the repo
+```
+git clone https://github.com/TharukshaM/todo-list.git
+```
+
+### Step 2: Go to the base directory
+```
+cd todo-list
+```
+
+### Step 3: Start the containers
+```
+docker compose up -d
+```
+
+### Step 4: After build is finished check container status
+```
+docker compose ps
+```
+
+Now open your browser and go to `http://public-ip` - You should see the login page! 🎉
 
 ## How to Use the App
 
