@@ -19,3 +19,25 @@ export const fetchListTodos = async() => {
         alert("Issue occured when fetching todoes");
     }
 }
+
+export const deleteTodoItem = async (id) => {
+  try {
+    const response = await api.delete(`/todolist/item/${id}`);
+    console.log("Deleted todo response:", response);
+    return response.data;
+  } catch (err) {
+    console.error("Error deleting todo:", err);
+    throw err.response?.data || { message: "Failed to delete todo" };
+  }
+};
+
+export const toggleTodoStatus = async (id) => {
+  try {
+    const response = await api.patch(`/todolist/item/${id}/toggle`);
+    console.log("Toggled todo status response:", response);
+    return response.data;
+  } catch (err) {
+    console.error("Error toggling todo status:", err);
+    throw err.response?.data || { message: "Failed to toggle todo" };
+  }
+};
