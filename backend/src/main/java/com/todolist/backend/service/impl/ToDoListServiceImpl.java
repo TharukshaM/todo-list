@@ -102,4 +102,26 @@ public class ToDoListServiceImpl implements ToDoListService {
             throw new RuntimeException(e.getMessage());
         }
     }
+
+    @Override
+    public ToDoItemResponseDto toggleCompleted(int userId, int todoId) {
+        var todo = toDoRepository.findById(todoId)
+                .orElseThrow(() -> new RuntimeException("Todo item not found"));
+
+        if (todo.getUser().getId() != userId) {
+            throw new RuntimeException("Unauthorized to update this todo");
+        }
+
+        todo.setCompleted(!todo.isCompleted());
+        toDoRepository.save(todo);
+
+        return ToDoItemResponseDto.builder()
+                .id(todo.getId())
+                .title(todo.getTitle())
+                .description(todo.getDescription())
+                .completed(todo.isCompleted())
+                .createdAt(todo.getCreatedAt())
+                .build();
+    }
+
 }
