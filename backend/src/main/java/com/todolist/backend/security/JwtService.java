@@ -20,7 +20,7 @@ public class JwtService {
 
     public JwtService(
             @Value("${app.jwt.secret}") String secret,
-            @Value("${app.jwt.access-ttl-min:15}") long accessTtlMin) {
+            @Value("${app.jwt.access-ttl-min:60}") long accessTtlMin) {
 
         if (secret == null || secret.length() < 32) {
             throw new IllegalStateException("app.jwt.secret must be at least 32 characters");

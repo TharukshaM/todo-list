@@ -10,5 +10,6 @@ public interface ToDoListService {
     List<ToDoItemResponseDto> getLatestToDoItems(int userid);
     ToDoItemResponseDto updateToDoItem(int userId,int todoId, ToDoItemRequestDto requestDto);
     String deleteToDoItem(int userId, int todoId);
+    ToDoItemResponseDto toggleCompleted(int userId, int todoId);
 
 }

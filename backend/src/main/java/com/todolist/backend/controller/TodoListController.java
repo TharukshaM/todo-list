@@ -64,4 +64,11 @@ public class TodoListController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Item deleted");
     }
 
+    @PatchMapping("/item/{id}/toggle")
+    public ResponseEntity<ToDoItemResponseDto> toggleCompleted(@PathVariable int id) {
+        int userId = currentUser();
+        ToDoItemResponseDto updatedItem = toDoListService.toggleCompleted(userId, id);
+        return ResponseEntity.ok(updatedItem);
+    }
+
 }
